@@ -1,0 +1,190 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools, amsfonts, bm}
+\usepackage{tikz, booktabs}
+\usepackage{multimedia}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes, calc, shadows.blur, positioning, arrows, arrows.meta}
+$for(header-includes)$
+$header-includes$
+$endfor$
+% Change the equation spacing - set the length plus an amount of expansion minus
+%  an amount of contraction (e.g., 1cm plus 4mm minus 3mm)
+\expandafter\def\expandafter\normalsize\expandafter{%
+	%    \normalsize
+	\setlength\abovedisplayskip{4pt}
+	\setlength\belowdisplayskip{4pt}
+	\setlength\abovedisplayshortskip{4pt}
+	\setlength\belowdisplayshortskip{4pt}
+}
+
+% Define Theorem
+\newtheorem{thm}{Theorem}
+
+\usetheme{Madrid}
+\definecolor{ucd-blue}{rgb}{0, 0.156862745, 0.333333333}
+\definecolor{ucd-gold}{rgb}{0.854901961, 0.666666667, 0}
+\setbeamercolor{structure}{fg=ucd-blue, bg=ucd-gold}
+\setbeamercolor{title}{fg=ucd-gold}
+\setbeamercolor{author in head/foot}{fg=ucd-gold}
+\setbeamercolor{title in head/foot}{fg=ucd-gold}
+\setbeamercolor{date in head/foot}{fg=ucd-gold}
+\setbeamercolor{frametitle}{fg=ucd-gold}
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+% \definecolor{ucla-blue}{rgb}{0.1953125,0.515625,0.74609375}
+% \definecolor{ucla-yellow}{rgb}{1.0,0.909803922,0}
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+
+% et al.
+\newcommand{\etal}{\textit{et al.}}
+
+% Bullet items
+\setlength{\leftmargini}{2ex}
+\setlength{\leftmarginii}{2ex}
+\setlength{\leftmarginiii}{2ex}
+\newcommand{\bli}{\begin{itemize}}%\blue
+	\newcommand{\eli}{\end{itemize}}
+\newcommand{\blii}{\begin{itemize}} % \black
+	\newcommand{\elii}{\end{itemize}}
+
+%% Equations
+\newcommand{\beq}{\[}
+\newcommand{\eeq}{\]\vspace{-\baselineskip}}
+
+% Define styles
+\newcommand{\reference}[1]{{\tiny\color{blue}(#1)\par}} % \blue
+\newcommand{\refnospace}[1]{{\tiny\color{blue}(#1)}} % \blue
+\newcommand{\refc}[1]{\reference{#1}\vspace{-\baselineskip}}
+\newcommand{\refh}[1]{\tiny\color{white}(#1)\par}
+
+% Macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\I}{\mathbb{I}}
+\newcommand{\set}[1]{\mathbb{#1}}
+\newcommand{\sr}{\Omega_{\rho}}
+\newcommand{\sre}{\Omega_{\rho_e}}
+\newcommand{\mvts}{\vspace{-\topsep}}
+\DeclareMathOperator*{\argmin}{arg\,min}				% Arg-min operator
+\newcommand{\tightlist}{}
+
+$if(macros)$
+$macros$
+$endif$
+
+% Macros
+% Two column slide - useful to create a slide with two columns or two figures on a slide
+%   Example: the command below creates two columns. The left column occupies 30% of the
+%    slide width. The text: "example text for column one" is placed in the left column
+%    and the text: "example text for column two" is placed in the right column
+%    \twocols[0.30]{example text for column one}{example text for column two}
+%\vspace{-\topsep}\vspace{2pt}
+\newcommand{\twocols}[3][0.5]{%
+	\vspace{-\baselineskip}\vspace{2pt}%
+	\begin{columns}[T]%
+		\begin{column}{#1\columnwidth}#2\end{column}%
+		\begin{column}{\columnwidth-{#1}\columnwidth}#3\end{column}%
+	\end{columns}%
+}
+% Fix left-align on bullets
+% \vspace{-\topsep}\vspace{2pt}
+\newcommand{\twocolsfix}[3][0.5]{%
+	\vspace{-\baselineskip}\vspace{2pt}%
+	\begin{columns}%
+		\begin{column}{#1\columnwidth-0.015\columnwidth}#2\end{column}%
+		\begin{column}{\columnwidth-{#1}\columnwidth-0.015\columnwidth}#3\end{column}%
+	\end{columns}%
+}
+
+\newcommand{\columnsbeginT}{\vspace{-\baselineskip}\vspace{2pt}\begin{columns}[T]}
+\newcommand{\columnsbegin}{\vspace{-\baselineskip}\vspace{2pt}\begin{columns}}
+\newcommand{\columnsend}{\end{columns}}
+
+\usefonttheme[onlymath]{serif}
+\graphicspath{{.}{fig/}{template/}}
+
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\textwidth,height=\textheight,keepaspectratio}
+
+% Redefine these macros
+\AtBeginPart{}
+\AtBeginSection{}
+\AtBeginSubsection{}
+
+% ====================================================================== %
+% TITLE
+$if(title)$
+$if(shorttitle)$
+\title[$shorttitle$]{$title$}
+$else$
+\title{$title$}
+$endif$
+$endif$
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+
+% AUTHORS
+% $if(author)$
+% \author{$for(author)$$author$$sep$ \and $endfor$}
+% $endif$
+
+$if(author)$
+$if(shortauthor)$
+\author[$shortauthor$]{$author$}
+$else$
+\author{$author$}
+$endif$
+$endif$
+
+% INSTITUTE
+\institute[]{
+\vspace{12pt}
+\begin{columns}
+	\begin{column}{0.2\columnwidth}
+		\includegraphics[width=\columnwidth]{ucdavis_logo_cmyk_blue.eps}
+	\end{column}
+	\begin{column}{0.55\columnwidth}
+		Department of Chemical Engineering \\
+		University of California, Davis
+	\end{column}
+\end{columns}
+\vspace{12pt}}
+
+% DATE
+$if(date)$
+$if(shortdate)$
+\date[$shortdate$]{$date$}
+$else$
+\date{$date$}
+$endif$
+$endif$
+% ====================================================================== %
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+	\titlepage
+\end{frame}
+
+$body$
+
+% Title slide
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\end{document}

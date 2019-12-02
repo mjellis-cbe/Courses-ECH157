@@ -1,0 +1,43 @@
+\usetikzlibrary{shapes,arrows}
+\tikzstyle{block} = [draw, rectangle, text centered,node distance=5em,minimum height=8mm, minimum width=15mm]
+\tikzstyle{sum} = [draw, circle, node distance=4em] 
+
+\centering
+
+\begin{tikzpicture}[auto,>=latex']
+	%%%%%%%%%% BLOCKS / COORDINATE %%%%%%%%%%
+	% Set-point coordinate
+	\node[coordinate] (ysp) {};
+	% Sum1
+	\node[sum,right of=ysp] (sum1) {};
+	% Sum2
+	\node[sum,right of=sum1] (sum2) {};
+	% Gc
+	\node[block,right of=sum2] (Gc) {$G_c$};
+	% G'
+	\node[block,below of=Gc, node distance=4em] (Gprime) {$G'$};
+	% Gp
+	\node[block,right of=Gc, node distance=9em] (Gp) {$G_p$};
+	% y coordinate
+	\node[coordinate, right of=Gp,node distance=5em] (y) {};
+	% Feedback
+	\node[coordinate, below of=Gprime,node distance=3em] (fd) {};
+	%%%%%%%%%%%%% ARROWS %%%%%%%%%%%%%
+	% Set-point
+	\draw[->] (ysp) -- node[pos=0.5] {$y_{sp}$} node[pos=0.9] {$+$} (sum1);
+	% Error
+	\draw[->] (sum1) -- node[pos=0.5] {$e$} node[pos=0.9] {$+$} (sum2);
+	% Error_c
+	\draw[->] (sum2) -- node[pos=0.5] {$e_c$} (Gc);
+	% Input
+	\draw[->] (Gc) -- node[pos=0.5] (input) {$u$} (Gp);
+	% Inner feedback to compensator
+	\draw[->] (input) |- (Gprime);
+	% Inner feedback of compensator output
+	\draw[->] (Gprime) -| node[pos=0.9] {$-$} (sum2);
+	% Output of process
+	\draw[->] (Gp) -- node[pos=0.5] (yfd) {$y$} (y);
+	% Feedback
+	\draw[-] (yfd) |- (fd);
+	\draw[->] (fd) -| node[pos=0.95] {$-$} (sum1);
+\end{tikzpicture}
