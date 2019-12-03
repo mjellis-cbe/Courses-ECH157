@@ -549,24 +549,182 @@ $$
 	- Relation of $y$ to $y_d$ and $d$
 	$$
 		\begin{aligned}
-			y & = d + \frac{G_c}{1 + c(G_p - G_m)}(y_d - d) \\
-			  & = \frac{G_c}{1 + c(G_p-G_m)} y_d + \frac{1 - G_m c}{1 + c(G_p-G_m)} d
+			y & = d + \frac{G_p c}{1 + c(G_p - G_m)}(y_d - d) \\
+			  & = \frac{G_p c}{1 + c(G_p-G_m)} y_d + \frac{1 - G_m c}{1 + c(G_p-G_m)} d
 		\end{aligned}
 	$$
 
 ### Internal Model Control
 
+1. Nominal closed-loop stability ($G_m \equiv G_p$)
+$$
+	\begin{aligned}
+		u & = c(y_d - d) \\
+		y & = G_p c(y_d - d) + d
+	\end{aligned}
+$$
+	- Input bounded if $c(s)$ is stable
+	- Output bounded if $G_p(s) c(s)$ is stable (requires $G_p(s)$)
+1. Offset-free control:
+$$
+	\begin{aligned}
+		\lim_{t \to \infty} y(t) & = \lim_{s \to 0} y(s) \\
+		& = \lim_{s \to 0} \frac{G_p(s) c(s)}{D(s)} y_d + \frac{1 - G_m(s) c(s)}{D(s)} d \\
+	\end{aligned}
+$$
+where $D(s) = 1+c(s) (G_p(s) - G_m(s))$
+	- If $\lim_{s \to 0} c(s) = 1/G_m(0)$, then $\lim_{s \to 0} 1 - G_m(s) c(s) = 0$ and
+	$$
+		\lim_{t \to \infty} y(t) = y_d
+	$$
 
+### Internal Model Control
 
+- Implementation issues
+	1. $G_m$ is never equal to $G_p$ in practices
+	1. Implementing $c(s)$ as $1/G_m(s)$ is rarely feasible (time delays, RHP zeros, and infinitely large control action)
+\pause
+- Design for practical implementation
+	1. $G_m = G_{m,+} G_{m,-}$
+		- $G_{m,+}$: noninvertible aspects with gain equal to one
+		- $G_{m,-}$: invertible parts
+	\pause
+	1. Controller design and filter design
+	$$
+		c(s) = \frac{1}{G_{m,-}} f(s), ~f(s) = \frac{1}{(\lambda s + 1)^n}
+	$$
+	$\lambda$, $n$ selected to ensure that $c(s)$ is proper (numerator order is less than or equal to the denominator order)
 
 # Optimization-based Control
-## Slides
 
-### Slides
+## Optimization-based Control
 
-State Space
-Discretization
-Finite-dimensional optimization
-Receding horizon implementation
+### Optimization-based Control
 
+- Model
+$$
+	\frac{dy}{dt} = f(y,u,d)
+$$
+- Instead of specifying desired value of $y_d$ along a specified reference trajectory, specify a performance criteria to optimize
+\pause
+- Objective functional
+$$
+	\phi = G(y(t_f)) + \int_0^{t_f} F(y,u,d) ~dt
+$$
+	- $y(t_f)$: output at final time $t$.
+	- $G(\cdot)$ and $F(\cdot, \cdot, \cdot)$ chose by control designer to reflect an aspect to be optimized
+	\pause
+	- May also consider constraints (e.g., valve may only be open 0 to 100 percent)
+	$$
+		\begin{aligned}
+			g(y,u) & \leq 0 \\
+			h(y,u) & = 0
+		\end{aligned}
+	$$
 
+### Multivariable Process Models
+
+- State space model form
+	- Nonlinear model
+	$$
+		\begin{aligned}
+			\frac{dx(t)}{dt} & = f(x,u,d) \\
+			y(t) & = h(x(t))
+		\end{aligned}
+	$$
+		- $x(t) \in \R^n$: state vector
+		- $u(t) \in \R^m$: input vector
+		- $y(t) \in \R^l$: output vector
+		- $f$ and $h$ are vector valued functions
+	\pause
+	- Linear model (may be obtained by linearizing the nonlinear model about an operating point)
+	$$
+		\begin{aligned}
+			\dot{x}(t) & = Ax(t) + Bu(t) + B_d d(t) \\
+			y(t) & = C x(t)
+		\end{aligned}
+	$$
+		- $A$, $B$, $B_d$, $C$: matrices of appropriate dimensions
+		- Note: higher order ordinary differential equations (ODEs) may be converted to a system of first-order ODEs
+
+### Solution of Linear ODEs
+
+- Solution
+$$
+	\begin{aligned}
+		x(t) & = e^{At} x_0 + \int_0^t e^{A(t-\sigma)} B u(\sigma) ~d\sigma \\
+		y(t) & = C e^{At} x_0 + C \int_0^t e^{A(t-\sigma)} B u(\sigma) ~d\sigma
+	\end{aligned}
+$$
+- $e^{At}$ denotes the matrix exponential of $At$ (`expm` command in Matlab)
+- Pole of system are eigenvalues of $A$
+
+### Digital Control
+
+- Modern control is implemented on digital computers
+- Optimization-based control considered here requires solving an optimization problem
+\pause
+- Need to discretize (in time) the model
+	- Partition time into discrete instances called sampling times
+	- Let $t_k = \delta k$, $k = 0, 1, 2, \ldots$ and $\delta > 0$ is the sampling period
+	- Zeroth order hold of controls - over the sampling period the control action is held constant:
+	$$
+		u(t) = u_k ~\text{for all} ~t\in [k\delta, (k+1)\delta), ~k = 0,1,\ldots
+	$$
+
+### Discrete-time State Space Model
+
+- Model in discrete-time
+$$
+	\begin{aligned}
+		x_{k+1} & = A_d x_k + B_d u_k \\
+		y_k & = C x_k
+	\end{aligned}
+$$
+- Matrices
+$$
+	A_d = e^{A\delta}, ~ B_d = \int_{0}^{\delta} e^{A(t-\sigma)} B~d\sigma
+$$
+- Use `c2d` command in Matlab
+
+### Model Predictive Control
+
+- Take $x = 0$ and $u= 0$ to be the desired operating point
+- Let $\mathbf{u} = \{ u_0, u_1, \ldots, u_{N-1} \}$
+
+#### Model Predictive Control Problem
+
+$$
+	\begin{aligned}
+		& \quad \min_{\mathbf{u}} && \sum_{k=0}^{N-1} x_k Q x_k + u_k R u_k \\
+		\pause
+		& \text{subject to} && x_{k+1} = Ax_k + Bu_k, ~k = 0, \ldots, N-1 \\
+		\pause
+		&&& x_0 = x \\
+		\pause
+		&&& x_{lb} \leq x_k \leq x_{ub}, ~k = 1, \ldots, N \\
+		&&& u_{lb} \leq u_k \leq u_{ub}, ~k = 0, \ldots, N-1
+	\end{aligned}
+$$
+
+### Model Predictive Control
+
+- Typically, optimization problem solved on-line every sampling time (requires solving an optimization problem on-line).
+- If $Q$ is positive semidefinite and $R$ is positive definite, problem is a convex quadratic program, which very efficient solvers exist
+
+### Model Predictive Control
+
+#### Receding Horizon Implementation
+
+1. Receive a measurement from sensors
+1. Solve the MPC problem to obtain the optimal input sequence over the prediction horizon $\{ u^*(0), u^*(1), \ldots, u^*(N-1) \}$
+1. Send control action for the first time step to control actuators/lower layer control to implemented over the sampling period
+1. Go back to step 1
+
+### Model Predictive Control
+
+![](fig/MPC1.eps "")
+
+### Model Predictive Control
+
+![](fig/MPC2.eps "")
