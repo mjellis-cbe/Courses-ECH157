@@ -1,11 +1,11 @@
 ---
-title: Introduction to Model-based Control
+title: Model-based Control
 shorttitle: Model-based Control
-author: \href{mailto:mjellis@ucdavis.edu}{Matthew J. Ellis}
+author: Matthew J. Ellis \href{mailto:mjellis@ucdavis.edu}{mjellis@ucdavis.edu}
 shortauthor: M. J. Ellis
 date: |
-	December 2, 2019 \par
-shortdate: Dec. 2, 2019
+	December 3, 2019 \par
+shortdate: Dec. 3, 2019
 header-includes:
 ...
 
@@ -42,11 +42,23 @@ header-includes:
 	\end{tikzpicture}
 \end{figure}
 
+\pause
 1. *Process Dynamics*: Given $u$ and $G_p$, determine $y$
 \pause
 1. *Process Modeling/Identification*: Given $u$ and $y$, determine $G_p$
 \pause
 1. *Process Control*: Given $G_p$ and $y$ (desired), determine $u$
+
+### Quintessential Take Away on Process Control
+
+Proportional-Integral Controller
+$$
+	u(s) = K_c \onslide<2>{ \left( 1 + \frac{1}{\tau_I s} \right) }
+$$
+\begin{itemize}
+	\onslide<1->{\item P-term: speed of response}
+	\onslide<2>{\item I-term: remove offset}
+\end{itemize}
 
 ### Process Control Synthesis/Design
 
@@ -109,8 +121,8 @@ $$
 ### Direct Synthesis Control
 
 - Problem: Given $G_p(s)$ and $q(s)$, find $G_c(s)$
-\pause
 - Controller synthesis formula
+\pause
 $$
 	G_c(s) = \frac{1}{G_p(s)}\left( \frac{q(s)}{1 - q(s)} \right)
 $$
@@ -346,6 +358,8 @@ $$
 
 ### Direct Synthesis Controllers
 
+- Specify closed-loop transfer function
+- No guarantees that resulting controller is implementable
 - Lower-order processes and closed-loop transfer functions, i.e., $q(s)$ yields familiar control laws with explicit formulas for parameters
 - Similar approaches may be applied to develop a inverse response compensator and direct synthesis controller for processes with inverse response
 - Special treatment for case of RHP zeros (robust stability)
@@ -595,6 +609,18 @@ where $D(s) = 1+c(s) (G_p(s) - G_m(s))$
 	$$
 	$\lambda$, $n$ selected to ensure that $c(s)$ is proper (numerator order is less than or equal to the denominator order)
 
+### Internal Model Control
+
+- Perfect control is achieved if model is perfect and
+$$
+	u(s) = \frac{1}{G_p(s)} \left[ y_d(s) - d(s) \right]
+$$
+- In practice, cannot achieve perfect control, so instead use:
+$$
+	u(s) = c(s) \left[ y_d(s) - \hat{d}(s) \right]
+$$
+where $\hat{d}(s) = y(s) - G_m(s) u(s)$
+
 # Optimization-based Control
 
 ## Optimization-based Control
@@ -686,6 +712,11 @@ $$
 	A_d = e^{A\delta}, ~ B_d = \int_{0}^{\delta} e^{A(t-\sigma)} B~d\sigma
 $$
 - Use `c2d` command in Matlab
+- Note that when $\delta$ is small:
+$$
+	A_d \approx I + A\delta, ~B_d \approx \delta B
+$$
+where $I$ is the identity matrix
 
 ### Model Predictive Control
 
@@ -728,3 +759,21 @@ $$
 ### Model Predictive Control
 
 ![](fig/MPC2.eps "")
+
+### Model Predictive Control
+
+- Specify a performance criteria that is optimized
+- Use a model to make a prediction of future process behavior
+- Optimization problem solved on-line to compute the control action
+- Receding horizon implementation
+
+### Quintessential Take Away on Process Control
+
+Proportional-Integral Controller
+$$
+	u(s) = K_c \onslide<2>{ \left( 1 + \frac{1}{\tau_I s} \right) }
+$$
+\begin{itemize}
+	\onslide<1->{\item P-term: speed of response}
+	\onslide<2>{\item I-term: remove offset}
+\end{itemize}
