@@ -1,0 +1,16 @@
+name: Compile Notes
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: maxheld83/pandoc@v2
+    - name: Compile notes
+      run: |
+        cd Courses-ECH157/Lectures/ModelBasedControl
+        make
