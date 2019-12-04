@@ -53,11 +53,11 @@ header-includes:
 
 Proportional-Integral Controller
 $$
-	u(s) = K_c \onslide<2>{ \left( 1 + \frac{1}{\tau_I s} \right) }
+	u(s) = K_c \onslide<2->{ \left( 1 + \frac{1}{\tau_I s} \right) }
 $$
 \begin{itemize}
-	\onslide<1->{\item P-term: speed of response}
-	\onslide<2>{\item I-term: remove offset}
+	\onslide<2->{\item P-term: speed of response}
+	\onslide<3>{\item I-term: remove offset}
 \end{itemize}
 
 ### Process Control Synthesis/Design
@@ -184,8 +184,8 @@ $$
 $$
 	G_p(s) = \frac{K}{\tau^2 s^2 + 2\zeta \tau s + 1}, ~q(s) = \frac{1}{\tau_r s + 1}
 $$
-\pause
 - Direct synthesis controller
+\pause
 $$
 	\begin{aligned}
 		G_c(s) & = \frac{\tau^2 s^2 + 2 \zeta \tau s + 1}{K \tau_r s} \\
@@ -217,8 +217,8 @@ $$
 $$
 	G_p(s) = \frac{Ke^{-as}}{\tau s + 1}, ~q(s) = \frac{e^{-a_r s}}{\tau_r s + 1}
 $$
-\pause
 - Direct synthesis controller
+\pause
 $$
 	G_c(s) = \frac{(\tau s + 1)}{K} \frac{e^{-(a_r-a)s}}{\tau_r s + 1 - e^{-a_r s}}
 $$
@@ -302,7 +302,7 @@ $$
 			& = y_d - y^*(s)
 	\end{aligned}
 $$
-- Feed $y^*$ (the prediction of $y$ at $a$) to controller
+- Provide $y^*$ (the prediction of $y$ $a$ time units in the future) to controller
 \begin{figure}
 	\centering
 	\begin{tikzpicture}[
@@ -450,9 +450,9 @@ $$
 $$
 
 - In practice, have $G_m(s)$ (model of $G_p(s)$) and $d(s)$ not measured
-	1. Use estimate disturbance:
+	1. Estimate disturbance:
 	$$
-		\tilde{d}(s) = y(s) - G_m(s) u(s)
+		\hat{d}(s) = y(s) - G_m(s) u(s)
 	$$
 	1. Let $c(s) = 1/G_m(s)$
 \pause
@@ -771,9 +771,9 @@ $$
 
 Proportional-Integral Controller
 $$
-	u(s) = K_c \onslide<2>{ \left( 1 + \frac{1}{\tau_I s} \right) }
+	u(s) = K_c \onslide<2->{ \left( 1 + \frac{1}{\tau_I s} \right) }
 $$
 \begin{itemize}
-	\onslide<1->{\item P-term: speed of response}
-	\onslide<2>{\item I-term: remove offset}
+	\onslide<2->{\item P-term: speed of response}
+	\onslide<3>{\item I-term: remove offset}
 \end{itemize}
