@@ -13,4 +13,4 @@ jobs:
     - name: Compile notes
       run: |
         cd Lectures/ModelBasedControl
-        make
+        which pandoc
