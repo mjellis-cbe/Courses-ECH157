@@ -10,7 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: maxheld83/pandoc@v2
-    - name: Compile notes
       run: |
         cd Lectures/ModelBasedControl
-        which pandoc
+        make
