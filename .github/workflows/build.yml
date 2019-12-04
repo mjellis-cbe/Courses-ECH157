@@ -12,5 +12,5 @@ jobs:
     - uses: maxheld83/pandoc@v2
     - name: Compile notes
       run: |
-        cd Courses-ECH157/Lectures/ModelBasedControl
+        cd Lectures/ModelBasedControl
         make
