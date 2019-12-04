@@ -454,7 +454,7 @@ $$
 	$$
 		\hat{d}(s) = y(s) - G_m(s) u(s)
 	$$
-	1. Let $c(s) = 1/G_m(s)$
+	1. Let $c(s) = 1/G_m(s)$ (note later slides discussing practical application)
 \pause
 - Internal model control:
 $$
@@ -540,11 +540,11 @@ $$
 		\draw [->] ($(sum3.north)+(0,1)$) -- node [pos=0.2, right] {$d$} node [pos=0.8, left] {$+$} (sum3);
 		\draw [->] (sum3) -- node [pos=0.5] (fdk) {} node [pos=0.7, above] {$y$} ($(sum3.east)+(1,0)$);
 		\draw [->] (fdk |- gp) -- ($(fdk)+(0,-2)$) -| node [pos=0.95, left] {$+$} (sum1);
-		\draw [->] (sum1) -- node [pos=0.5, above] {$e$} node [pos=0.8, above] {$+$} (sum2);
+		\draw [->] (sum1) -- node [pos=0.5, above] {$e$} node [pos=0.8, above] {$-$} (sum2);
 		\draw [->] (sum2) -- node [pos=0.5, above] {} (gc);
 		\draw [->] (gc) -- node [pos=0.5] (fdk) {} node [pos=0.5, above] {$u$} (gp);
 		\draw [->] (fdk |- gp) |- (gt);
-		\draw [->] (gt) -| node [pos=0.9, left] {$-$} (sum2);
+		\draw [->] (gt) -| node [pos=0.9, left] {$+$} (sum2);
 	\end{tikzpicture}
 \end{figure}
 
@@ -557,7 +557,7 @@ $$
 - Closed loop transfer function relations and controller properties
 	- Relation of $u$ to $y_d$ and $d$
 	$$
-		y = \frac{c}{1 + c(G_p-G_m)} (y_d - d)
+		u = \frac{c}{1 + c(G_p-G_m)} (y_d - d)
 	$$
 	\pause
 	- Relation of $y$ to $y_d$ and $d$
@@ -579,18 +579,21 @@ $$
 $$
 	- Input bounded if $c(s)$ is stable
 	- Output bounded if $G_p(s) c(s)$ is stable (requires $G_p(s)$)
-1. Offset-free control:
+
+### Internal Model Control
+
+2. Offset-free control:
+	- Consider $y_d \equiv 0$ and a unit step response in the disturbance ($d(s) = 1/s$)
+	- Apply final value theorem
 $$
 	\begin{aligned}
-		\lim_{t \to \infty} y(t) & = \lim_{s \to 0} y(s) \\
-		& = \lim_{s \to 0} \frac{G_p(s) c(s)}{D(s)} y_d + \frac{1 - G_m(s) c(s)}{D(s)} d \\
+		\lim_{t \to \infty} y(t) & = \lim_{s \to 0} s y(s) \\
+		& = \lim_{s \to 0} \frac{G_p(s)c(s)}{1 + c(s)(G_p(s) - G_m(s))} 0\cdot s + \frac{1 - G_m(s) c(s)}{1+c(s) (G_p(s) - G_m(s))} \frac{s}{s} \\
+		& = \lim_{s \to 0} \frac{1 - G_m(s) c(s)}{1+c(s) (G_p(s) - G_m(s))}
 	\end{aligned}
 $$
-where $D(s) = 1+c(s) (G_p(s) - G_m(s))$
-	- If $\lim_{s \to 0} c(s) = 1/G_m(0)$, then $\lim_{s \to 0} 1 - G_m(s) c(s) = 0$ and
-	$$
-		\lim_{t \to \infty} y(t) = y_d
-	$$
+	- If $\lim_{s \to 0} c(s) = 1/G_m(0)$, then $\lim_{s \to 0} 1 - G_m(s) c(s) = 0$ and $\lim_{t \to \infty} y(t) = 0$
+	- No offset regardless of the potential plant model mismatch
 
 ### Internal Model Control
 
